@@ -1,5 +1,4 @@
 #include <iostream>
-#include <iomanip>
 using namespace std;
 
 struct Block {
@@ -81,32 +80,36 @@ public:
             delete tmp;
         }
     }
+void display()
+{
+    cout << "\n  Memory Map (total = " << total << ")\n";
+    cout << "  +-----------------------------------+\n";
+    cout << "  | Start |  End  | Size  | Status    |\n";
+    cout << "  +-----------------------------------+\n";
 
-    void display()
+    Block* temp = head;
+
+    while (temp != nullptr)
     {
-        cout << "\n  Memory Map (total = " << total << ")\n";
-        cout << "  +-------+-------+-------+-----------+\n";
-        cout << "  | Start |  End  | Size  |  Status   |\n";
-        cout << "  +-------+-------+-------+-----------+\n";
-        Block* temp = head;
-        while (temp != nullptr)
-        {
-            cout << "  | " << setw(5) << temp->start
-                 << " | " << setw(5) << temp->start + temp->size - 1
-                 << " | " << setw(5) << temp->size
-                 << " | ";
-            if (temp->free)
-                cout << "FREE     ";
-            else
-                cout << "P" << left << setw(8) << temp->pid << right;
-            cout << " |\n";
-            temp = temp->next;
-        }
-        cout << "  +-------+-------+-------+-----------+\n";
-        cout << "  Total free: " << totalFree()
-             << " | Largest free block: " << largestFree() << "\n";
+        cout << "  | " << temp->start
+             << " | " << temp->start + temp->size - 1
+             << " | " << temp->size << " | ";
+
+        if (temp->free)
+            cout << "FREE";
+        else
+            cout << "P" << temp->pid;
+
+        cout << "\n";
+        temp = temp->next;
     }
 
+    cout << "  +-----------------------------------+\n";
+
+    cout << "  Total free: " << totalFree()
+         << " | Largest free block: " << largestFree() << "\n";
+}
+    
     bool allocate(int pid, int size)
     {
         cout << "\n>> Allocate P" << pid << " (size " << size << ")\n";
